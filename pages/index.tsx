@@ -1,63 +1,64 @@
-import type { ReactElement } from 'react'
-import Layout from '../components/layout/layout'
-import { useState, useEffect } from 'react'
-import { supabase } from '../utils/supabaseClient.js'
-import Auth from '../components/account/auth'
-import Account from '../components/account/account'
+import type { ReactElement } from "react";
+import Layout from "../components/layout/layout";
+import { useState, useEffect } from "react";
+import { supabase } from "../utils/supabaseClient.js";
+import Auth from "../components/account/auth";
+import Account from "../components/account/account";
+import Link from "next/link";
 
 export default function Page() {
-  const [session, setSession] = useState(null)
+  const [session, setSession] = useState(null);
 
   useEffect(() => {
-    setSession(supabase.auth.session())
+    setSession(supabase.auth.session());
 
     supabase.auth.onAuthStateChange((_event, session) => {
-      setSession(session)
-    })
-  }, [])
+      setSession(session);
+    });
+  }, []);
 
   return (
     <>
-    <div>
-      {!session ? <Auth /> : <Account key={session.user.id} session={session} />}
-    </div>
-    <div className="grid">
-          <a href="/players" className="card">
+      <div>
+        {!session ? (
+          <Auth />
+        ) : (
+          <Account key={session.user.id} session={session} />
+        )}
+      </div>
+      <div className="grid">
+        <Link href="/players">
+          <div className="card">
             <h2>Players</h2>
             <p>Manage your players</p>
-          </a>
+          </div>
+        </Link>
 
-          <a href="/games" className="card">
+        <Link href="/games">
+          <div className="card">
             <h2>Continue game</h2>
             <p>Continue your current game</p>
-          </a>
+          </div>
+        </Link>
 
-          <a
-            href="https://github.com/vercel/next.js/tree/canary/examples"
-            className="card"
-          >
+        <Link href="/stats">
+          <div className="card">
             <h2>Stats</h2>
             <p>Who's the champion?</p>
-          </a>
+          </div>
+        </Link>
 
-          <a
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className="card"
-          >
+        <Link href="/settings">
+          <div className="card">
             <h2>Settings</h2>
-            <p>
-              Edit scoring rules, special hands and more
-            </p>
-          </a>
-        </div>
-      </>
-  )
+            <p>Edit scoring rules, special hands and more</p>
+          </div>
+        </Link>
+      </div>
+    </>
+  );
 }
 
 Page.getLayout = function getLayout(page: ReactElement) {
-  return (
-    <Layout title="Game on!">
-      {page}
-    </Layout>
-  )
-}
+  return <Layout title="Game on!">{page}</Layout>;
+};
